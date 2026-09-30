@@ -71,7 +71,6 @@ def stats():
     print("Health:", health)
     print("Score:", score)
     print("Treasure:", treasure)
-
         
 
     
