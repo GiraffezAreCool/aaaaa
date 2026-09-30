@@ -46,19 +46,19 @@ class Player(Object):
 
         if dragonType == 1:
             self.name = "Fire"
-            self.hp = 200
+            self.hp = 150
             self.dmg = 2
 
 
         elif dragonType == 2:
             self.name = "Tank"
-            self.hp = 300
+            self.hp = 200
             self.dmg = 1
 
 
         else:
             self.name = "Heal"
-            self.hp = 200
+            self.hp = 150
             self.dmg = 1
 
 
