@@ -406,15 +406,16 @@ def makeGame(DT, level=1, score=0, hp=None):
     if hp != None:
         player.hp = hp
 
+    # Creating key
 
+    Key(keyX, keyY, board)
     # Creating treasures
     for i in range(5):
         x, y = board.rP()
         Treasure(x, y, board)
 
-    # Creating key
 
-    Key(keyX, keyY, board)
+
 
     # Creating normal enemies
     enemies = []
@@ -575,6 +576,8 @@ while running:
                 player.attack(-1,0)
                 acted = True
             elif event.key == pygame.K_RIGHT:
+
+                
                 player.attack(1,0)
                 acted = True
             elif event.key == pygame.K_h:
@@ -595,6 +598,8 @@ while running:
 
     if DT != None and acted and not board.gameOver:
 
+
+
         if board.freezeTurns > 0:
             board.freezeTurns -= 1
         else:
@@ -606,6 +611,10 @@ while running:
     screen.fill(BG)
     if DT == None:
         drawSelect()
+
+
+
+
     else:
         drawGrid(board)
         drawStats(board, player)
@@ -614,6 +623,8 @@ while running:
 
     pygame.display.update()
     clock.tick(60)
+
+
     
 pygame.quit()
 
