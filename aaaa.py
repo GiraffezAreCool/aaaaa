@@ -19,6 +19,17 @@ font = pygame.font.Font(None,32)
 small = pygame.font.Font(None,24)
 big = pygame.font.Font(None,42)
 
+BG = (20,25,35)
+WHITE = (240,240,240)
+BLUE = (60,150,255)
+RED = (220,70,70)
+PURPLE = (175,95,230)
+GREEN = (65,195,105)
+YELLOW = (200,150,25)
+GREY = (90,95,105)
+ORANGE = (200,100,0)
+MAROON = (200,10,100)
+
 # Parent class
 class Object():
     def __init__(self,x,y,board):
@@ -455,58 +466,65 @@ def drawGrid(board):
             drawX = BOARD_X+x*CELL
             drawY = BOARD_Y+y*CELL
 
-            pygame.draw.rect(screen,EMPTY,(drawX,drawY,CELL,CELL))
-            pygame.draw.rect(screen, GRID,(drawX,drawY,CELL,CELL), 2)
-
+            
             # The goat safe zone area
             if (x,y) == board.safeZone:
-                img = font.render("S",True,(255,255,255))
+                img = font.render("S",True,WHITE)
+                pygame.draw.rect(screen,GREEN,(drawX,drawY,CELL,CELL))
                 screen.blit(img,img.get_rect(center=(drawX+CELL//2,drawY+CELL//2)))
 
             obj = board.board[x][y]
-
-            # Drawing the dragon
+            colour = GREY
             if obj != "":
-                img = font.render(obj.symbol, True, (255,255,255))
+                match obj.symbol:
+                    case "D": colour = BLUE
+                    case "K": colour = YELLOW
+                    case "E": colour = RED
+                    case "C": colour = ORANGE
+                    case "T": colour = PURPLE
+                    case "B": colour = MAROON
+                pygame.draw.rect(screen,colour,(drawX,drawY,CELL,CELL))
+                img = font.render(obj.symbol, True, WHITE)
                 screen.blit(img, img.get_rect(center=(drawX+CELL//2, drawY+CELL//2)))
+            pygame.draw.rect(screen, GRID,(drawX,drawY,CELL,CELL), 1)
 
 # Visual representation - saves progress
 def drawStats(board, player):
     x = 650
 
-    draw("TUFF DRAGON CITY", big, (255,255,255), x, 70)
+    draw("TUFF DRAGON CITY", big, WHITE, x, 70)
 
-    draw("Dragon: "+player.name, small, (255,255,255), x, 110)
-    draw("Score: "+str(player.score), small, (255,255,255), x, 140)
-    draw("Level: "+str(board.level), small, (255,255,255), x, 175)
-    draw("Key: "+("YES" if player.key else "NO"), small, (255,255,255), x, 210)
-    draw("Damage: "+str(player.dmg), small, (255,255,255), x, 280)
-    draw("HP: "+str(player.hp), small, (255,255,255), x, 245)
+    draw("Dragon: "+player.name, small, WHITE, x, 110)
+    draw("Score: "+str(player.score), small, WHITE, x, 140)
+    draw("Level: "+str(board.level), small, WHITE, x, 175)
+    draw("Key: "+("YES" if player.key else "NO"), small, WHITE, x, 210)
+    draw("Damage: "+str(player.dmg), small, WHITE, x, 280)
+    draw("HP: "+str(player.hp), small, WHITE, x, 245)
 
-    draw("WASD = move", small, (255,255,255), x, 340)
-    draw("Arrows = attack", small, (255,255,255), x, 375)
-    draw("Find K then reach S", small, (255,255,255), x, 420)
-    draw("T = bonus points", small, (255,255,255), x, 455)
+    draw("WASD = move", small, WHITE, x, 340)
+    draw("Arrows = attack", small, WHITE, x, 375)
+    draw("Find K then reach S", small, WHITE, x, 420)
+    draw("T = bonus points", small, WHITE, x, 455)
 
     # Freezing process only
-    draw("Freezes: "+str(player.freezes), small, (255,255,255), x, 490)
-    draw("F = freeze enemies", small, (255,255,255), x, 520)
+    draw("Freezes: "+str(player.freezes), small, WHITE, x, 490)
+    draw("F = freeze enemies", small, WHITE, x, 520)
     if board.freezeTurns > 0:
-        draw("FROZEN: "+str(board.freezeTurns), small, (255,255,255), x, 310)
+        draw("FROZEN: "+str(board.freezeTurns), small, WHITE, x, 310)
     # Healing process only
     if player.dt == 3:
-        draw("Heal: "+("USED" if player.healUsed else "READY"), small, (255,255,255), x, 550)
-        draw("H = heal", small, (255,255,255), x, 580)
+        draw("Heal: "+("USED" if player.healUsed else "READY"), small, WHITE, x, 550)
+        draw("H = heal", small, WHITE, x, 580)
 
 # Choose tuff dragons
 def drawSelect():
-    draw("CHOOSE YOUR DRAGON", big, (255,255,255), 320, 100)
-    draw("1 - Fire Dragon", font, (255,255,255), 350, 210)
-    draw("100 HP  |  2 Damage", small, (255,255,255), 370, 245)
-    draw("2 - Tank Dragon", font, (255,255,255), 350, 310)
-    draw("150 HP  |  1 Damage", small, (255,255,255), 370, 345)
-    draw("3 - Heal Dragon", font, (255,255,255), 350, 410)
-    draw("100 HP  |  1 Damage", small, (255,255,255), 370, 445)
+    draw("CHOOSE YOUR DRAGON", big, WHITE, 320, 100)
+    draw("1 - Fire Dragon", font, WHITE, 350, 210)
+    draw("100 HP  |  2 Damage", small, WHITE, 370, 245)
+    draw("2 - Tank Dragon", font, WHITE, 350, 310)
+    draw("150 HP  |  1 Damage", small, WHITE, 370, 345)
+    draw("3 - Heal Dragon", font, WHITE, 350, 410)
+    draw("100 HP  |  1 Damage", small, WHITE, 370, 445)
 
 # Game over screen
 def drawEnd(player):
@@ -515,9 +533,9 @@ def drawEnd(player):
     cover.fill(BG)
     screen.blit(cover,(0,0))
 
-    draw("GAME OVER", big, (255,255,255), 385, 230)
-    draw("Score: "+str(player.score), font, (255,255,255), 415, 295)
-    draw("R = restart", font, (255,255,255), 400, 350)
+    draw("GAME OVER", big, WHITE, 385, 230)
+    draw("Score: "+str(player.score), font, WHITE, 415, 295)
+    draw("R = restart", font, WHITE, 400, 350)
 clock = pygame.time.Clock()
 running = True
 
